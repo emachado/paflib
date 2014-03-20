@@ -30,6 +30,7 @@
 #define _PAF_EBB_H
 
 #include <stdint.h>
+#include <stdlib.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -55,6 +56,11 @@ typedef enum
 int paf_ebb_pmu_init (uint64_t raw_event, int group);
 void paf_ebb_pmu_set_period (uint32_t sample_period);
 void paf_ebb_pmu_reset (void);
+int paf_ebb_pmu_init_with_pid (uint64_t raw_event, int group, pid_t pid);
+int paf_ebb_event_close (int fd);
+int paf_ebb_event_read (int fd);
+
+
 
 ebbhandler_t paf_ebb_handler (void);
 ebbhandler_t paf_ebb_register_handler (ebbhandler_t handler, void *context,
