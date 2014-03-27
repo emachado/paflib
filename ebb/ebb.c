@@ -46,9 +46,9 @@
 
 /* Per-thread EBB handler information if TCB fields are not available.  */
 __thread
-  attribute_initial_exec
-  attribute_hidden
-  struct ebb_thread_info_t __paf_ebb_thread_info = { 0, NULL };
+attribute_initial_exec
+attribute_hidden
+struct ebb_thread_info_t __paf_ebb_thread_info = { 0, NULL };
 
 /* Helper function to start the Linux perf/EBB.  */
 int
@@ -109,7 +109,7 @@ paf_ebb_pmu_init_with_pid (uint64_t raw_event, int group, pid_t pid)
   /* Bit 63 from perf_event_attr::config indicate if it is an EBB setup. */
   pe.config = raw_event | UINT64_C (0x8000000000000000);
   /* EBB setup has strict flags configuration: only the group leader
-   *    * (group == -1) can have the pinned and exclusive bit set.  */
+   * (group == -1) can have the pinned and exclusive bit set.  */
   pe.pinned = (group == -1) ? 1 : 0;
   pe.exclusive = (group == -1) ? 1 : 0;
   pe.exclude_kernel = 1;
@@ -135,9 +135,9 @@ paf_ebb_pmu_init_with_pid (uint64_t raw_event, int group, pid_t pid)
 int
 paf_ebb_event_close (int fd)
 {
-  ioctl (fd, PERF_EVENT_IOC_DISABLE);
-  close (fd);
-  return 0;
+  if (ioctl (fd, PERF_EVENT_IOC_DISABLE) != 0)
+    return -1;
+  return close (fd);
 }
 
 int

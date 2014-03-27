@@ -21,9 +21,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- *
- * Contributors:
- *     IBM Corporation, Adhemerval Zanella - Initial implementation.
  */
 
 #include <stdio.h>
@@ -33,15 +30,16 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "test_ebb_common.h"
+
 static volatile int ebb_handler_triggered = 0;
 
 #define TEST_LOOP_COUNT 2
 
 /*
- * * Tests we can setup an EBB on our child. The child expects this and enables
- * * EBBs, which are then delivered to the child, even though the event is
- * * created by the parent.
- * */
+ * Tests we can setup an EBB on our child. The child expects this and enables
+ * EBBs, which are then delivered to the child, even though the event is
+ * created by the parent.
+ */
 
 static void attribute_noinline
 ebb_handler_test (void *context)
