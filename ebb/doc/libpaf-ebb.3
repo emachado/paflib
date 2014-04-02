@@ -32,6 +32,8 @@ libpaf-ebb \- The Power Architecture Facilities Event-Based Branch Library
 .sp
 .BI "int paf_ebb_pmu_init(uint64_t " raw_event ", int " group ");
 .sp
+.BI "int paf_ebb_pmu_init_with_pid(uint64_t " raw_event ", int " group ", pid_t " pid ");
+.sp
 .BI "void paf_ebb_pmu_set_period(uint32_t " sample_period ");
 .sp
 .BI "void paf_ebb_pmu_reset(void);
@@ -44,6 +46,8 @@ void * "context ", paf_ebb_callback_type_t " type ", int " flags ");
 .BI "int paf_ebb_enable_branches(void);
 .sp
 .Bi "int paf_ebb_disable_branches(void);
+.sp
+.Bi "int paf_ebb_event_close (int " fd ");
 .sp
 Compile and link with \fI\-lpaf\-ebb\fP.
 
@@ -89,6 +93,19 @@ To reset it to potentially
 trigger another event call
 .BR paf_ebb_pmu_reset().
 
+.BR paf_ebb_pmu_init_with_pid()
+initializes the PMU event generation configuring the hardware
+counter
+.I raw_event
+with the specified
+.I group
+and 
+.I pid.
+The first call should use -1 to start a new group. Subsequent calls may create
+new groups or use the returned file descriptor from
+.BR paf_ebb_pmu_init
+to associate events in a group.
+
 .BR paf_ebb_register_handler()
 registers the user
 .I handler
@@ -124,9 +141,15 @@ enables EBB triggering.
 .BR paf_ebb_disable_branches()
 disables EBB triggering.
 
+.BR paf_ebb_event_close()
+closes PMU event.
+
 .SH "RETURN VALUE"
 
 .BR paf_ebb_pmu_init()
+returns a file descriptor to be used in group association or -1 case of error.
+
+.BR paf_ebb_pmu_init_with_pid()
 returns a file descriptor to be used in group association or -1 case of error.
 
 .BR paf_ebb_register_handler()
@@ -138,6 +161,9 @@ returns the previous registered handler or EBB_REG_ERR if no handler has been re
 .BR paf_ebb_enable_branches()
 and
 .BR paf_ebb_disable_branches()
+return 0 in case of success or -1 otherwise.
+
+.BR paf_ebb_event_close()
 return 0 in case of success or -1 otherwise.
 
 .SH ERRORS
