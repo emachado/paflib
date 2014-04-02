@@ -51,11 +51,11 @@ attribute_hidden
 struct ebb_thread_info_t __paf_ebb_thread_info = { 0, NULL };
 
 /* Helper function to start the Linux perf/EBB.  */
-int
-paf_ebb_pmu_init (uint64_t raw_event, int group)
+
+static int
+paf_ebb_pmu_event_init (uint64_t raw_event, int group, pid_t pid)
 {
   struct perf_event_attr pe;
-  pid_t pid;
   int cpu;
   int fd;
   uint64_t count;
@@ -74,7 +74,6 @@ paf_ebb_pmu_init (uint64_t raw_event, int group)
   pe.exclude_idle = 1;
 
   /* It also need to be attached to a task:  */
-  pid = 0;
   cpu = -1;
 
   fd = syscall (__NR_perf_event_open, &pe, pid, cpu, group, 0);
@@ -95,41 +94,15 @@ paf_ebb_pmu_init (uint64_t raw_event, int group)
 
   return fd;
 }
-
+int
+paf_ebb_pmu_init (uint64_t raw_event, int group)
+{
+  return (paf_ebb_pmu_event_init(raw_event, group, 0));
+}
 int
 paf_ebb_pmu_init_with_pid (uint64_t raw_event, int group, pid_t pid)
 {
-  struct perf_event_attr pe;
-  int cpu;
-  int fd;
-
-  memset (&pe, 0, sizeof (struct perf_event_attr));
-  pe.type = PERF_TYPE_RAW;
-  pe.size = sizeof (struct perf_event_attr);
-  /* Bit 63 from perf_event_attr::config indicate if it is an EBB setup. */
-  pe.config = raw_event | UINT64_C (0x8000000000000000);
-  /* EBB setup has strict flags configuration: only the group leader
-   * (group == -1) can have the pinned and exclusive bit set.  */
-  pe.pinned = (group == -1) ? 1 : 0;
-  pe.exclusive = (group == -1) ? 1 : 0;
-  pe.exclude_kernel = 1;
-  pe.exclude_hv = 1;
-  pe.exclude_idle = 1;
-
-  /* It also need to be attached to a task:  */
-  cpu = -1;
-
-  fd = syscall (__NR_perf_event_open, &pe, pid, cpu, group, 0);
-  if (fd == -1)
-    return -1;
-
-  if (ioctl (fd, PERF_EVENT_IOC_ENABLE, 0) != 0)
-    {
-      close (fd);
-      return -1;
-    }
-
-  return fd;
+  return (paf_ebb_pmu_event_init(raw_event, group, pid));
 }
 
 int
@@ -138,18 +111,6 @@ paf_ebb_event_close (int fd)
   if (ioctl (fd, PERF_EVENT_IOC_DISABLE) != 0)
     return -1;
   return close (fd);
-}
-
-int
-paf_ebb_event_read (int fd)
-{
-  uint64_t count;
-  if (read (fd, &count, sizeof (count)) == EOF)
-    {
-      close (fd);
-      return -1;
-    }
-  return 0;
 }
 
 void

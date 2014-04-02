@@ -22,8 +22,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * Contributors:
- *     IBM Corporation, Adhemerval Zanella - Initial implementation.
  */
 
 #include <stdio.h>
@@ -34,6 +32,7 @@
 #include <stdlib.h>
 #include "test_ebb_common.h"
 
+#define PM_CONFIG 0x1001e
 /* Test that things work sanely if we have no handler */
 int
 ebb_no_handler_test (void)
@@ -41,15 +40,12 @@ ebb_no_handler_test (void)
   int i, ebbfd;
   unsigned long long val;
 
-  ebbfd = paf_ebb_pmu_init (0x1001e, -1);
-
+  ebbfd = paf_ebb_pmu_init (PM_CONFIG, -1);
   if (ebbfd == -1)
     {
       printf ("Error: paf_ebb_init_pmu () failed " "(errno = %i)\n", errno);
       return -1;
     }
-
-
   val = mfspr (EBBHR);
   if (val != 0)
     printf ("Error\n");
@@ -67,7 +63,6 @@ ebb_no_handler_test (void)
     {
       printf ("Error: PMAO is not set\n");
       return -1;
-
     }
   paf_ebb_event_close (ebbfd);
 

@@ -32,55 +32,72 @@
 #include "test_ebb_common.h"
 
 static volatile int ebb_handler_triggered = 0;
-
+#define PM_CONFIG 0x1001e
 #define TEST_LOOP_COUNT 2
+#define PARENT_TOKEN    0xAA
+#define CHILD_TOKEN     0x55
 
-/*
- * Tests we can setup an EBB on our child. The child expects this and enables
- * EBBs, which are then delivered to the child, even though the event is
- * created by the parent.
- */
-
-static void attribute_noinline
-ebb_handler_test (void *context)
+/* For parent child synchronization */
+union pipe
 {
-  int *trigger = (int *) (context);
-  printf ("%s: ebb_handler_triggered address = %p\n", __FUNCTION__, trigger);
-  *trigger += 1;
+  struct
+  {
+    int read_fd;
+    int write_fd;
+  };
+  int fds[2];
+};
+
+int
+sync_with_child (union pipe read_pipe, union pipe write_pipe)
+{
+  char c = PARENT_TOKEN;
+  if (write (write_pipe.write_fd, &c, 1) != 1)
+    {
+      printf ("Error: sync_with_child\n");
+      return 1;
+    }
+  if (read (read_pipe.read_fd, &c, 1) != 1)
+    {
+      printf ("Error: sync_with_child\n");
+      return 1;
+    }
+  if (c != CHILD_TOKEN)		/* sometimes expected */
+    {
+      printf ("Error: sync_with_child\n");
+      return 1;
+    }
+  return 0;
 }
 
 int
-child ()
+wait_for_parent (union pipe read_pipe)
 {
-  ebbhandler_t handler;
+  char c;
 
-  ebb_handler_triggered = 0;
-  printf ("Setting Handler on child\n");
-  /* Setup our EBB handler, before the EBB event is created */
-  handler = paf_ebb_register_handler (ebb_handler_test,
-				      (void *) &ebb_handler_triggered,
-				      PAF_EBB_CALLBACK_GPR_SAVE,
-				      PAF_EBB_FLAGS_RESET_PMU);
-  if (handler != ebb_handler_test)
+  if (read (read_pipe.read_fd, &c, 1) != 1)
     {
-      printf ("Error: paf_ebb_register_handler \
-              (ebb_handler_test) != handler\n");
-      return -1;
+      printf ("Error: wait_for_parent\n");
+      return 1;
     }
-
-  sleep (3);
-  printf ("Enabling EBB on child\n");
-  paf_ebb_enable_branches ();
-
-  paf_ebb_pmu_reset ();
-  while (ebb_handler_triggered != TEST_LOOP_COUNT)
+  if (c != PARENT_TOKEN)
     {
-      if (ebb_check_mmcr0 ())
-	return 1;
+      printf ("Error: wait_for_parent\n");
+      return 1;
     }
+  return 0;
+}
 
-  paf_ebb_disable_branches ();
+int
+notify_parent (union pipe write_pipe)
+{
+  char c = CHILD_TOKEN;
 
+  if (write (write_pipe.write_fd, &c, 1) != 1)
+    {
+      printf ("Error: notify_parent\n");
+      return 1;
+    }
   return 0;
 }
 
@@ -103,33 +120,90 @@ wait_for_child (pid_t child_pid)
   return rc;
 }
 
+/*
+ * Tests we can setup an EBB on our child. The child expects this and enables
+ * EBBs, which are then delivered to the child, even though the event is
+ * created by the parent.
+ */
+
+static void attribute_noinline
+ebb_handler_test (void *context)
+{
+  int *trigger = (int *) (context);
+  printf ("%s: ebb_handler_triggered address = %p\n", __FUNCTION__, trigger);
+  *trigger += 1;
+}
+
+int
+child (union pipe read_pipe, union pipe write_pipe)
+{
+  wait_for_parent (read_pipe);
+  ebbhandler_t handler;
+  ebb_handler_triggered = 0;
+  printf ("Setting Handler on child\n");
+  /* Setup our EBB handler, before the EBB event is created */
+  handler = paf_ebb_register_handler (ebb_handler_test,
+				      (void *) &ebb_handler_triggered,
+				      PAF_EBB_CALLBACK_GPR_SAVE,
+				      PAF_EBB_FLAGS_RESET_PMU);
+  if (handler != ebb_handler_test)
+    {
+      printf ("Error: paf_ebb_register_handler \
+              (ebb_handler_test) != handler\n");
+      return -1;
+    }
+  printf ("Enabling EBB on child\n");
+  paf_ebb_enable_branches ();
+  notify_parent (write_pipe);
+  wait_for_parent (read_pipe);
+  paf_ebb_pmu_reset ();
+  while (ebb_handler_triggered != TEST_LOOP_COUNT)
+    {
+      if (ebb_check_mmcr0 ())
+	return 1;
+    }
+  paf_ebb_disable_branches ();
+  notify_parent (write_pipe);
+  return 0;
+}
+
 /* Tests we can setup an EBB on child.*/
 int
 ebb_on_child (void)
 {
   pid_t pid;
   int ebbfd;
-
+  union pipe read_pipe, write_pipe;
+  if (pipe (read_pipe.fds) == -1)
+    {
+      printf ("Error: pipe()failed \n");
+      return -1;
+    }
+  if (pipe (write_pipe.fds) == -1)
+    {
+      printf ("Error: pipe()failed \n");
+      return -1;
+    }
   pid = fork ();
   if (pid == 0)
     {
-      child ();
-      exit (0);
+      exit (child (write_pipe, read_pipe));
     }
-  sleep (2);
-
+  /* Signal the child to setup its EBB handler */
+  sync_with_child (read_pipe, write_pipe);
+  ebbfd = paf_ebb_pmu_init_with_pid (PM_CONFIG, -1, pid);
   printf ("Setting EBB on child\n");
-  ebbfd = paf_ebb_pmu_init_with_pid (0x1001e, -1, pid);
-  paf_ebb_event_read (ebbfd);
   if (ebbfd == -1)
     {
-      printf ("Error: paf_ebb_pmu_init_with_pid () failed " "(errno = %i)\n", errno);
+      printf ("Error: paf_ebb_pmu_init_with_pid () failed " "(errno = %i)\n",
+	      errno);
       return -1;
     }
-
+  sync_with_child (read_pipe, write_pipe);
+  /* Child now take EBBs and then exit */
   if (wait_for_child (pid))
     {
-      printf ("Error: waiting for child");
+      printf ("Error: waiting for child\n");
       return 1;
     }
   paf_ebb_event_close (ebbfd);

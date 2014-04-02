@@ -33,6 +33,7 @@
 #include <signal.h>
 #include "test_ebb_common.h"
 
+#define PM_CONFIG 0x1001e
 static volatile int ebb_handler_triggered = 0;
 static jmp_buf setjmp_env;
 
@@ -91,7 +92,7 @@ test_ebb_clear_on_close (void)
   int ebbfd;
   ebbhandler_t handler;
 
-  ebbfd = paf_ebb_pmu_init (0x1001e, -1);
+  ebbfd = paf_ebb_pmu_init (PM_CONFIG, -1);
 
   if (ebbfd == -1)
     {
