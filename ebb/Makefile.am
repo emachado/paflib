@@ -96,3 +96,9 @@ test_ebb_nohandler_SOURCES  = tests/test_ebb_nohandler.c \
                                 tests/test_ebb_common.c
 test_ebb_nohandler_LDADD    = libpaf-ebb.la
 noinst_PROGRAMS              += test_ebb_nohandler
+
+TESTS                        += test_ebb_cpu
+test_ebb_cpu_SOURCES  = tests/test_ebb_cpu.c \
+                                tests/test_ebb_common.c
+test_ebb_cpu_LDADD    = libpaf-ebb.la
+noinst_PROGRAMS              += test_ebb_cpu

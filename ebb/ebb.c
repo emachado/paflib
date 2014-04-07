@@ -53,10 +53,9 @@ struct ebb_thread_info_t __paf_ebb_thread_info = { 0, NULL };
 /* Helper function to start the Linux perf/EBB.  */
 
 static int
-paf_ebb_pmu_event_init (uint64_t raw_event, int group, pid_t pid)
+paf_ebb_pmu_event_init (uint64_t raw_event, int group, pid_t pid, int cpu)
 {
   struct perf_event_attr pe;
-  int cpu;
   int fd;
   uint64_t count;
 
@@ -74,7 +73,6 @@ paf_ebb_pmu_event_init (uint64_t raw_event, int group, pid_t pid)
   pe.exclude_idle = 1;
 
   /* It also need to be attached to a task:  */
-  cpu = -1;
 
   fd = syscall (__NR_perf_event_open, &pe, pid, cpu, group, 0);
   if (fd == -1)
@@ -97,14 +95,19 @@ paf_ebb_pmu_event_init (uint64_t raw_event, int group, pid_t pid)
 int
 paf_ebb_pmu_init (uint64_t raw_event, int group)
 {
-  return (paf_ebb_pmu_event_init(raw_event, group, 0));
+  return (paf_ebb_pmu_event_init(raw_event, group, 0, -1));
 }
 int
 paf_ebb_pmu_init_with_pid (uint64_t raw_event, int group, pid_t pid)
 {
-  return (paf_ebb_pmu_event_init(raw_event, group, pid));
+  return (paf_ebb_pmu_event_init(raw_event, group, pid, -1));
 }
 
+int
+paf_ebb_pmu_init_with_cpu (uint64_t raw_event, int group, int cpu)
+{
+  return (paf_ebb_pmu_event_init(raw_event, group, 0, cpu));
+}
 int
 paf_ebb_event_close (int fd)
 {
