@@ -52,6 +52,10 @@ typedef enum
 } paf_ebb_callback_type_t;
 
 #define PAF_EBB_FLAGS_RESET_PMU	0x1
+/* Enable PMU Event-Based exception (PME - bit 31).  */
+#define PAF_EBB_ENABLE() mtspr (BESCRS, (1 << 31));
+/* Disable PMU Event-Based exception (PME - bit 31).  */
+#define PAF_EBB_DISABLE() mtspr (BESCRR, (1 << 31));
 
 int paf_ebb_pmu_init (uint64_t raw_event, int group);
 void paf_ebb_pmu_set_period (uint32_t sample_period);
