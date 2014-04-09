@@ -98,7 +98,7 @@ test_ebb_cpu (void)
 	return 1;
     }
 
-  PAF_EBB_DISABLE();
+  paf_ebb_disable_branches ();
 
   paf_ebb_event_close (ebbfd);
 

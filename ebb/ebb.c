@@ -209,7 +209,7 @@ paf_ebb_enable_branches (void)
     }
 
   /* Enable PMU Event-Based exception (PME - bit 31).  */
-  PAF_EBB_ENABLE();
+  mtspr (BESCRS, (1 << 31));
   return 0;
 }
 
@@ -223,6 +223,6 @@ paf_ebb_disable_branches (void)
     }
 
   /* Disable PMU Event-Based exception (PME - bit 31).  */
-  PAF_EBB_DISABLE();
+  mtspr (BESCRR, (1 << 31));
   return 0;
 }
