@@ -15,7 +15,6 @@
 @SET_MAKE@
 
 
-
 VPATH = @srcdir@
 am__is_gnu_make = test -n '$(MAKEFILE_LIST)' && test -n '$(MAKELEVEL)'
 am__make_running_with_option = \
@@ -80,9 +79,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-TESTS = test_dsc$(EXEEXT)
+TESTS = test_tb$(EXEEXT)
 noinst_PROGRAMS = $(am__EXEEXT_1)
-subdir = dsc
+subdir = tb
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/depcomp $(nobase_include_HEADERS) \
 	$(top_srcdir)/test-driver
@@ -97,57 +96,16 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
-am__vpath_adj = case $$p in \
-    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
-    *) f=$$p;; \
-  esac;
-am__strip_dir = f=`echo $$p | sed -e 's|^.*/||'`;
-am__install_max = 40
-am__nobase_strip_setup = \
-  srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
-am__nobase_strip = \
-  for p in $$list; do echo "$$p"; done | sed -e "s|$$srcdirstrip/||"
-am__nobase_list = $(am__nobase_strip_setup); \
-  for p in $$list; do echo "$$p $$p"; done | \
-  sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | \
-  $(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; \
-    if (++n[$$2] == $(am__install_max)) \
-      { print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } \
-    END { for (dir in files) print dir, files[dir] }'
-am__base_list = \
-  sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
-  sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__uninstall_files_from_dir = { \
-  test -z "$$files" \
-    || { test ! -d "$$dir" && test ! -f "$$dir" && test ! -r "$$dir"; } \
-    || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
-         $(am__cd) "$$dir" && rm -f $$files; }; \
-  }
-am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(man3dir)" \
-	"$(DESTDIR)$(includedir)"
-LTLIBRARIES = $(lib_LTLIBRARIES)
-libpaf_dsc_la_DEPENDENCIES =
-am__objects_1 =
+am__EXEEXT_1 = test_tb$(EXEEXT)
+PROGRAMS = $(noinst_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
-am__objects_2 = ../common/libpaf_dsc_la-paf-hwcap.lo \
-	../common/libpaf_dsc_la-paf-interp.lo
-am_libpaf_dsc_la_OBJECTS = libpaf_dsc_la-init.lo libpaf_dsc_la-dsc.lo \
-	libpaf_dsc_la-hwcap.lo libpaf_dsc_la-dsc-version.lo \
-	$(am__objects_1) $(am__objects_2)
-libpaf_dsc_la_OBJECTS = $(am_libpaf_dsc_la_OBJECTS)
+am_test_tb_OBJECTS = tests/test_tb.$(OBJEXT)
+test_tb_OBJECTS = $(am_test_tb_OBJECTS)
+test_tb_LDADD = $(LDADD)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libpaf_dsc_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libpaf_dsc_la_CFLAGS) \
-	$(CFLAGS) $(libpaf_dsc_la_LDFLAGS) $(LDFLAGS) -o $@
-am__EXEEXT_1 = test_dsc$(EXEEXT)
-PROGRAMS = $(noinst_PROGRAMS)
-am_test_dsc_OBJECTS = tests/test_dsc.$(OBJEXT)
-test_dsc_OBJECTS = $(am_test_dsc_OBJECTS)
-test_dsc_DEPENDENCIES = libpaf-dsc.la
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -182,14 +140,42 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(libpaf_dsc_la_SOURCES) $(test_dsc_SOURCES)
-DIST_SOURCES = $(libpaf_dsc_la_SOURCES) $(test_dsc_SOURCES)
+SOURCES = $(test_tb_SOURCES)
+DIST_SOURCES = $(test_tb_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
+am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
+am__vpath_adj = case $$p in \
+    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
+    *) f=$$p;; \
+  esac;
+am__strip_dir = f=`echo $$p | sed -e 's|^.*/||'`;
+am__install_max = 40
+am__nobase_strip_setup = \
+  srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
+am__nobase_strip = \
+  for p in $$list; do echo "$$p"; done | sed -e "s|$$srcdirstrip/||"
+am__nobase_list = $(am__nobase_strip_setup); \
+  for p in $$list; do echo "$$p $$p"; done | \
+  sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | \
+  $(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; \
+    if (++n[$$2] == $(am__install_max)) \
+      { print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } \
+    END { for (dir in files) print dir, files[dir] }'
+am__base_list = \
+  sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
+  sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
+am__uninstall_files_from_dir = { \
+  test -z "$$files" \
+    || { test ! -d "$$dir" && test ! -f "$$dir" && test ! -r "$$dir"; } \
+    || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
+         $(am__cd) "$$dir" && rm -f $$files; }; \
+  }
 man3dir = $(mandir)/man3
+am__installdirs = "$(DESTDIR)$(man3dir)" "$(DESTDIR)$(includedir)"
 NROFF = nroff
 MANS = $(man3_MANS)
 HEADERS = $(nobase_include_HEADERS)
@@ -510,29 +496,13 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CFLAGS = -Wall
 AM_LDFLAGS = -rdynamic
-AM_CPPFLAGS = -I$(top_srcdir)/common -I$(top_srcdir)/dsc
-nobase_include_HEADERS = paf/dsc.h
+AM_CPPFLAGS = -I$(top_srcdir)/common -I$(top_srcdir)/tb
+nobase_include_HEADERS = paf/tb.h
 INTERNAL_INCLUDES = hwcap.h \
                     common.h
 
-lib_LTLIBRARIES = libpaf-dsc.la
-LIBPPCEBB_COMMON_SOURCES = ../common/paf-hwcap.c \
-                           ../common/paf-interp.c
-
-libpaf_dsc_la_SOURCES = init.c \
-                        dsc.c \
-                        hwcap.c \
-                        dsc-version.c \
-                        $(include_HEADERS) \
-                        $(INTERNAL_INCLUDES) \
-                        $(LIBPPCEBB_COMMON_SOURCES)
-
-libpaf_dsc_la_CFLAGS = -Wl,-entry=__paflib_dsc_main
-libpaf_dsc_la_LIBADD = $(LIBAUXV)
-libpaf_dsc_la_LDFLAGS = -version-info $(LIBPAF_SO_VERSION)
-man3_MANS = doc/libpaf-dsc.3
-test_dsc_SOURCES = tests/test_dsc.c
-test_dsc_LDADD = libpaf-dsc.la
+man3_MANS = doc/libpaf-tb.3
+test_tb_SOURCES = tests/test_tb.c
 all: all-am
 
 .SUFFIXES:
@@ -546,9 +516,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign dsc/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign tb/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign dsc/Makefile
+	  $(AUTOMAKE) --foreign tb/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -568,54 +538,6 @@ $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
 
-install-libLTLIBRARIES: $(lib_LTLIBRARIES)
-	@$(NORMAL_INSTALL)
-	@list='$(lib_LTLIBRARIES)'; test -n "$(libdir)" || list=; \
-	list2=; for p in $$list; do \
-	  if test -f $$p; then \
-	    list2="$$list2 $$p"; \
-	  else :; fi; \
-	done; \
-	test -z "$$list2" || { \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(libdir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(libdir)" || exit 1; \
-	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 '$(DESTDIR)$(libdir)'"; \
-	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 "$(DESTDIR)$(libdir)"; \
-	}
-
-uninstall-libLTLIBRARIES:
-	@$(NORMAL_UNINSTALL)
-	@list='$(lib_LTLIBRARIES)'; test -n "$(libdir)" || list=; \
-	for p in $$list; do \
-	  $(am__strip_dir) \
-	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f '$(DESTDIR)$(libdir)/$$f'"; \
-	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/$$f"; \
-	done
-
-clean-libLTLIBRARIES:
-	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
-	@list='$(lib_LTLIBRARIES)'; \
-	locs=`for p in $$list; do echo $$p; done | \
-	      sed 's|^[^/]*$$|.|; s|/[^/]*$$||; s|$$|/so_locations|' | \
-	      sort -u`; \
-	test -z "$$locs" || { \
-	  echo rm -f $${locs}; \
-	  rm -f $${locs}; \
-	}
-../common/$(am__dirstamp):
-	@$(MKDIR_P) ../common
-	@: > ../common/$(am__dirstamp)
-../common/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) ../common/$(DEPDIR)
-	@: > ../common/$(DEPDIR)/$(am__dirstamp)
-../common/libpaf_dsc_la-paf-hwcap.lo: ../common/$(am__dirstamp) \
-	../common/$(DEPDIR)/$(am__dirstamp)
-../common/libpaf_dsc_la-paf-interp.lo: ../common/$(am__dirstamp) \
-	../common/$(DEPDIR)/$(am__dirstamp)
-
-libpaf-dsc.la: $(libpaf_dsc_la_OBJECTS) $(libpaf_dsc_la_DEPENDENCIES) $(EXTRA_libpaf_dsc_la_DEPENDENCIES) 
-	$(AM_V_CCLD)$(libpaf_dsc_la_LINK) -rpath $(libdir) $(libpaf_dsc_la_OBJECTS) $(libpaf_dsc_la_LIBADD) $(LIBS)
-
 clean-noinstPROGRAMS:
 	@list='$(noinst_PROGRAMS)'; test -n "$$list" || exit 0; \
 	echo " rm -f" $$list; \
@@ -630,29 +552,21 @@ tests/$(am__dirstamp):
 tests/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) tests/$(DEPDIR)
 	@: > tests/$(DEPDIR)/$(am__dirstamp)
-tests/test_dsc.$(OBJEXT): tests/$(am__dirstamp) \
+tests/test_tb.$(OBJEXT): tests/$(am__dirstamp) \
 	tests/$(DEPDIR)/$(am__dirstamp)
 
-test_dsc$(EXEEXT): $(test_dsc_OBJECTS) $(test_dsc_DEPENDENCIES) $(EXTRA_test_dsc_DEPENDENCIES) 
-	@rm -f test_dsc$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(test_dsc_OBJECTS) $(test_dsc_LDADD) $(LIBS)
+test_tb$(EXEEXT): $(test_tb_OBJECTS) $(test_tb_DEPENDENCIES) $(EXTRA_test_tb_DEPENDENCIES) 
+	@rm -f test_tb$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_tb_OBJECTS) $(test_tb_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
-	-rm -f ../common/*.$(OBJEXT)
-	-rm -f ../common/*.lo
 	-rm -f tests/*.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@../common/$(DEPDIR)/libpaf_dsc_la-paf-hwcap.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../common/$(DEPDIR)/libpaf_dsc_la-paf-interp.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libpaf_dsc_la-dsc-version.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libpaf_dsc_la-dsc.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libpaf_dsc_la-hwcap.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libpaf_dsc_la-init.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_dsc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_tb.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -678,54 +592,11 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
 
-libpaf_dsc_la-init.lo: init.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libpaf_dsc_la_CFLAGS) $(CFLAGS) -MT libpaf_dsc_la-init.lo -MD -MP -MF $(DEPDIR)/libpaf_dsc_la-init.Tpo -c -o libpaf_dsc_la-init.lo `test -f 'init.c' || echo '$(srcdir)/'`init.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libpaf_dsc_la-init.Tpo $(DEPDIR)/libpaf_dsc_la-init.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='init.c' object='libpaf_dsc_la-init.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libpaf_dsc_la_CFLAGS) $(CFLAGS) -c -o libpaf_dsc_la-init.lo `test -f 'init.c' || echo '$(srcdir)/'`init.c
-
-libpaf_dsc_la-dsc.lo: dsc.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libpaf_dsc_la_CFLAGS) $(CFLAGS) -MT libpaf_dsc_la-dsc.lo -MD -MP -MF $(DEPDIR)/libpaf_dsc_la-dsc.Tpo -c -o libpaf_dsc_la-dsc.lo `test -f 'dsc.c' || echo '$(srcdir)/'`dsc.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libpaf_dsc_la-dsc.Tpo $(DEPDIR)/libpaf_dsc_la-dsc.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dsc.c' object='libpaf_dsc_la-dsc.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libpaf_dsc_la_CFLAGS) $(CFLAGS) -c -o libpaf_dsc_la-dsc.lo `test -f 'dsc.c' || echo '$(srcdir)/'`dsc.c
-
-libpaf_dsc_la-hwcap.lo: hwcap.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libpaf_dsc_la_CFLAGS) $(CFLAGS) -MT libpaf_dsc_la-hwcap.lo -MD -MP -MF $(DEPDIR)/libpaf_dsc_la-hwcap.Tpo -c -o libpaf_dsc_la-hwcap.lo `test -f 'hwcap.c' || echo '$(srcdir)/'`hwcap.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libpaf_dsc_la-hwcap.Tpo $(DEPDIR)/libpaf_dsc_la-hwcap.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='hwcap.c' object='libpaf_dsc_la-hwcap.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libpaf_dsc_la_CFLAGS) $(CFLAGS) -c -o libpaf_dsc_la-hwcap.lo `test -f 'hwcap.c' || echo '$(srcdir)/'`hwcap.c
-
-libpaf_dsc_la-dsc-version.lo: dsc-version.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libpaf_dsc_la_CFLAGS) $(CFLAGS) -MT libpaf_dsc_la-dsc-version.lo -MD -MP -MF $(DEPDIR)/libpaf_dsc_la-dsc-version.Tpo -c -o libpaf_dsc_la-dsc-version.lo `test -f 'dsc-version.c' || echo '$(srcdir)/'`dsc-version.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libpaf_dsc_la-dsc-version.Tpo $(DEPDIR)/libpaf_dsc_la-dsc-version.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dsc-version.c' object='libpaf_dsc_la-dsc-version.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libpaf_dsc_la_CFLAGS) $(CFLAGS) -c -o libpaf_dsc_la-dsc-version.lo `test -f 'dsc-version.c' || echo '$(srcdir)/'`dsc-version.c
-
-../common/libpaf_dsc_la-paf-hwcap.lo: ../common/paf-hwcap.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libpaf_dsc_la_CFLAGS) $(CFLAGS) -MT ../common/libpaf_dsc_la-paf-hwcap.lo -MD -MP -MF ../common/$(DEPDIR)/libpaf_dsc_la-paf-hwcap.Tpo -c -o ../common/libpaf_dsc_la-paf-hwcap.lo `test -f '../common/paf-hwcap.c' || echo '$(srcdir)/'`../common/paf-hwcap.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../common/$(DEPDIR)/libpaf_dsc_la-paf-hwcap.Tpo ../common/$(DEPDIR)/libpaf_dsc_la-paf-hwcap.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../common/paf-hwcap.c' object='../common/libpaf_dsc_la-paf-hwcap.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libpaf_dsc_la_CFLAGS) $(CFLAGS) -c -o ../common/libpaf_dsc_la-paf-hwcap.lo `test -f '../common/paf-hwcap.c' || echo '$(srcdir)/'`../common/paf-hwcap.c
-
-../common/libpaf_dsc_la-paf-interp.lo: ../common/paf-interp.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libpaf_dsc_la_CFLAGS) $(CFLAGS) -MT ../common/libpaf_dsc_la-paf-interp.lo -MD -MP -MF ../common/$(DEPDIR)/libpaf_dsc_la-paf-interp.Tpo -c -o ../common/libpaf_dsc_la-paf-interp.lo `test -f '../common/paf-interp.c' || echo '$(srcdir)/'`../common/paf-interp.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../common/$(DEPDIR)/libpaf_dsc_la-paf-interp.Tpo ../common/$(DEPDIR)/libpaf_dsc_la-paf-interp.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../common/paf-interp.c' object='../common/libpaf_dsc_la-paf-interp.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libpaf_dsc_la_CFLAGS) $(CFLAGS) -c -o ../common/libpaf_dsc_la-paf-interp.lo `test -f '../common/paf-interp.c' || echo '$(srcdir)/'`../common/paf-interp.c
-
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
-	-rm -rf ../common/.libs ../common/_libs
 install-man3: $(man3_MANS)
 	@$(NORMAL_INSTALL)
 	@list1='$(man3_MANS)'; \
@@ -985,9 +856,9 @@ recheck: all
 	        am__force_recheck=am--force-recheck \
 	        TEST_LOGS="$$log_list"; \
 	exit $$?
-test_dsc.log: test_dsc$(EXEEXT)
-	@p='test_dsc$(EXEEXT)'; \
-	b='test_dsc'; \
+test_tb.log: test_tb$(EXEEXT)
+	@p='test_tb$(EXEEXT)'; \
+	b='test_tb'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
@@ -1040,9 +911,9 @@ distdir: $(DISTFILES)
 check-am: all-am
 	$(MAKE) $(AM_MAKEFLAGS) check-TESTS
 check: check-am
-all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(MANS) $(HEADERS)
+all-am: Makefile $(PROGRAMS) $(MANS) $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(man3dir)" "$(DESTDIR)$(includedir)"; do \
+	for dir in "$(DESTDIR)$(man3dir)" "$(DESTDIR)$(includedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -1074,8 +945,6 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
-	-rm -f ../common/$(DEPDIR)/$(am__dirstamp)
-	-rm -f ../common/$(am__dirstamp)
 	-rm -f tests/$(DEPDIR)/$(am__dirstamp)
 	-rm -f tests/$(am__dirstamp)
 
@@ -1084,11 +953,11 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
-	clean-noinstPROGRAMS mostlyclean-am
+clean-am: clean-generic clean-libtool clean-noinstPROGRAMS \
+	mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf ../common/$(DEPDIR) ./$(DEPDIR) tests/$(DEPDIR)
+	-rm -rf tests/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -1111,7 +980,7 @@ install-dvi: install-dvi-am
 
 install-dvi-am:
 
-install-exec-am: install-libLTLIBRARIES
+install-exec-am:
 
 install-html: install-html-am
 
@@ -1134,7 +1003,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf ../common/$(DEPDIR) ./$(DEPDIR) tests/$(DEPDIR)
+	-rm -rf tests/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -1151,30 +1020,27 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-libLTLIBRARIES uninstall-man \
-	uninstall-nobase_includeHEADERS
+uninstall-am: uninstall-man uninstall-nobase_includeHEADERS
 
 uninstall-man: uninstall-man3
 
 .MAKE: check-am install-am install-strip
 
 .PHONY: CTAGS GTAGS TAGS all all-am check check-TESTS check-am clean \
-	clean-generic clean-libLTLIBRARIES clean-libtool \
-	clean-noinstPROGRAMS cscopelist-am ctags ctags-am distclean \
-	distclean-compile distclean-generic distclean-libtool \
-	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am \
-	install-libLTLIBRARIES install-man install-man3 \
+	clean-generic clean-libtool clean-noinstPROGRAMS cscopelist-am \
+	ctags ctags-am distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-dvi install-dvi-am install-exec \
+	install-exec-am install-html install-html-am install-info \
+	install-info-am install-man install-man3 \
 	install-nobase_includeHEADERS install-pdf install-pdf-am \
 	install-ps install-ps-am install-strip installcheck \
 	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	recheck tags tags-am uninstall uninstall-am \
-	uninstall-libLTLIBRARIES uninstall-man uninstall-man3 \
-	uninstall-nobase_includeHEADERS
+	recheck tags tags-am uninstall uninstall-am uninstall-man \
+	uninstall-man3 uninstall-nobase_includeHEADERS
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
