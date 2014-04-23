@@ -32,15 +32,30 @@
 #include <stdint.h>
 
 /* We use 64bit values for the times.  */
+#ifdef __powerpc64__
 typedef uint64_t timing;
+#else
+typedef uint32_t timing;
+#endif
 
 static inline timing
 paf_timing_now ()
 {
-  timing val;
   /* Read the Time Base Register.   */
+#ifdef __powerpc64__
+  timing val;
   __asm__ __volatile__ ("mfspr %0, 268":"=r" (val));
   return val;
+#else
+    timing hi, lo, tmp;
+    __asm__ __volatile__ ("1:   mfspr   %0,269;"
+                          "     mfspr   %1,268;"
+                          "     mfspr   %2,269;"
+                          "     cmpw    %0,%2;"
+                          "     bne     1b;"
+                          : "=&r" (hi), "=&r" (lo), "=&r" (tmp));
+    return (((uint64_t) hi << 32) | lo);
+#endif
 }
 
 static inline void 

@@ -34,7 +34,7 @@ int
 main ()
 {
   int i, j;
-  uint64_t load_time, start, stop, sum = 0;
+  timing load_time, start, stop, sum = 0;
 
   for (i = 0; i < 3; i++)
     {
@@ -43,8 +43,8 @@ main ()
       stop = paf_timing_now ();
       load_time = paf_timing_diff (start, stop);
       paf_timing_accum (&sum, load_time);
-      printf ("Time taken by the for loop is %ld ticks\n", load_time);
+      printf ("Time taken by the for loop is %d ticks\n", load_time);
     }
-  printf ("Total time taken is %ld ticks\n",sum);
+  printf ("Total time taken is %d ticks\n",sum);
   return 0;
 }

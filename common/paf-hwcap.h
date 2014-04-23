@@ -47,6 +47,9 @@
 #ifndef PPC_FEATURE2_HAS_DSCR
 # define PPC_FEATURE2_HAS_DSCR   0x20000000 /* Data Stream Control Register */ 
 #endif
+#ifndef PPC_FEATURE_NO_TB
+#define PPC_FEATURE_NO_TB        0x00100000 /* 601/403gx have no timebase */
+#endif
 
 struct hwcap_t
 {
