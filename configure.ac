@@ -60,13 +60,19 @@ AC_ARG_ENABLE(ebb,
 	      [enable_ebb=$enableval],
 	      [enable_ebb=yes]
 )
+
 AC_ARG_ENABLE(tb,
               AS_HELP_STRING([--disable-tb],
                              [disable TIMEBASE build @<:@not default@:>@]),
               [enable_tb=$enableval],
               [enable_tb=yes]
 )
-
+AC_ARG_ENABLE(ppr,
+              AS_HELP_STRING([--disable-ppr],
+                             [disable PPR build @<:@not default@:>@]),
+              [enable_ppr=$enableval],
+              [enable_ppr=yes]
+)
 if test $enable_ebb != yes; then
   if test $enable_dsc != yes; then
     AC_MSG_ERROR([All the libraries are disabled. At least one library have to be enabled.])
@@ -76,6 +82,7 @@ fi
 AM_CONDITIONAL([DSC], [test "$enable_dsc" = yes])
 AM_CONDITIONAL([EBB], [test "$enable_ebb" = yes])
 AM_CONDITIONAL([TB], [test "$enable_tb" = yes])
+AM_CONDITIONAL([PPR], [test "$enable_ppr" = yes])
 
 # Checkings for libpaf-ebb
 AC_ARG_ENABLE([save-area],
@@ -159,5 +166,5 @@ linux/perf_event.h])
 # Checks for typedefs, structures, and compiler characteristics
 AC_C_VOLATILE
 
-AC_CONFIG_FILES([Makefile ebb/Makefile dsc/Makefile tb/Makefile])
+AC_CONFIG_FILES([Makefile ebb/Makefile dsc/Makefile tb/Makefile ppr/Makefile])
 AC_OUTPUT

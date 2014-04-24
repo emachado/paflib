@@ -682,6 +682,8 @@ CFLAGS
 CC
 POWERPC64_FALSE
 POWERPC64_TRUE
+PPR_FALSE
+PPR_TRUE
 TB_FALSE
 TB_TRUE
 EBB_FALSE
@@ -770,6 +772,7 @@ enable_debug
 enable_dsc
 enable_ebb
 enable_tb
+enable_ppr
 enable_save_area
 enable_dependency_tracking
 enable_shared
@@ -1415,6 +1418,7 @@ Optional Features:
   --disable-dsc           disable DSC library build [not default]
   --disable-ebb           disable EBB library build [not default]
   --disable-tb            disable TIMEBASE build [not default]
+  --disable-ppr           disable PPR build [not default]
   --enable-save-area=AREA define the default EBB internal save area[runtime
                           default]
   --enable-dependency-tracking
@@ -2915,6 +2919,7 @@ else
 
 fi
 
+
 # Check whether --enable-tb was given.
 if test "${enable_tb+set}" = set; then :
   enableval=$enable_tb; enable_tb=$enableval
@@ -2923,6 +2928,13 @@ else
 
 fi
 
+# Check whether --enable-ppr was given.
+if test "${enable_ppr+set}" = set; then :
+  enableval=$enable_ppr; enable_ppr=$enableval
+else
+  enable_ppr=yes
+
+fi
 
 if test $enable_ebb != yes; then
   if test $enable_dsc != yes; then
@@ -2952,6 +2964,14 @@ fi
 else
   TB_TRUE='#'
   TB_FALSE=
+fi
+
+ if test "$enable_ppr" = yes; then
+  PPR_TRUE=
+  PPR_FALSE='#'
+else
+  PPR_TRUE='#'
+  PPR_FALSE=
 fi
 
 
@@ -12790,7 +12810,7 @@ $as_echo "#define volatile /**/" >>confdefs.h
 fi
 
 
-ac_config_files="$ac_config_files Makefile ebb/Makefile dsc/Makefile tb/Makefile"
+ac_config_files="$ac_config_files Makefile ebb/Makefile dsc/Makefile tb/Makefile ppr/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -12927,6 +12947,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${TB_TRUE}" && test -z "${TB_FALSE}"; then
   as_fn_error $? "conditional \"TB\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${PPR_TRUE}" && test -z "${PPR_FALSE}"; then
+  as_fn_error $? "conditional \"PPR\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${POWERPC64_TRUE}" && test -z "${POWERPC64_FALSE}"; then
@@ -13829,6 +13853,7 @@ do
     "ebb/Makefile") CONFIG_FILES="$CONFIG_FILES ebb/Makefile" ;;
     "dsc/Makefile") CONFIG_FILES="$CONFIG_FILES dsc/Makefile" ;;
     "tb/Makefile") CONFIG_FILES="$CONFIG_FILES tb/Makefile" ;;
+    "ppr/Makefile") CONFIG_FILES="$CONFIG_FILES ppr/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
