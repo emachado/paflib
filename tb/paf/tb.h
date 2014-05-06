@@ -33,21 +33,21 @@
 
 /* We use 64bit values for the times.  */
 #ifdef __powerpc64__
-typedef uint64_t timing;
+typedef uint64_t paf_tb_timing_t;
 #else
-typedef uint32_t timing;
+typedef uint32_t paf_tb_timing_t;
 #endif
 
-static inline timing
+static inline paf_tb_timing_t
 paf_timing_now ()
 {
   /* Read the Time Base Register.   */
 #ifdef __powerpc64__
-  timing val;
+  paf_tb_timing_t val;
   __asm__ __volatile__ ("mfspr %0, 268":"=r" (val));
   return val;
 #else
-    timing hi, lo, tmp;
+    paf_tb_timing_t hi, lo, tmp;
     __asm__ __volatile__ ("1:   mfspr   %0,269;"
                           "     mfspr   %1,268;"
                           "     mfspr   %2,269;"
@@ -59,15 +59,15 @@ paf_timing_now ()
 }
 
 static inline void 
-paf_timing_accum (timing * sum, timing diff)
+paf_timing_accum (paf_tb_timing_t * sum, paf_tb_timing_t diff)
 {
   *sum += diff;
 }
 
-static inline timing 
-paf_timing_diff (timing start, timing end)
+static inline paf_tb_timing_t 
+paf_timing_diff (paf_tb_timing_t start, paf_tb_timing_t end)
 {
-  timing diff;
+  paf_tb_timing_t diff;
   diff = end - start;
   return diff;
 }

@@ -52,22 +52,18 @@ typedef enum
 } paf_ebb_callback_type_t;
 
 #define PAF_EBB_FLAGS_RESET_PMU	0x1
-#define BESCRS      800  /* Branch Event Status and Control Set.  */
-#define BESCRR      802  /* Branch Event Status and Control Reset.  */
-#define __stringify_1(x)        #x
-#define __stringify(x)          __stringify_1(x)
 
 /* Enable PMU Event-Based exception (PME - bit 31).  */
 static inline void paf_ebb_enable_branches_fast (void)
 {
-  asm volatile("mtspr " __stringify(BESCRS) ",%0"
+  asm volatile("mtspr 800, %0"
                  : : "r" ((unsigned long)(1 << 31)));
 }
 
 /* Disable PMU Event-Based exception (PME - bit 31).  */
 static inline void paf_ebb_disable_branches_fast (void)
 {
-  asm volatile("mtspr " __stringify(BESCRR) ",%0"
+  asm volatile("mtspr 802, %0"
                  : : "r" ((unsigned long)(1 << 31)));
 }
 

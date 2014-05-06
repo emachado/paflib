@@ -70,6 +70,14 @@ paf_mdoom (void)
      Rx = 6 (medium-low/normal)
    The 'or' instruction form is a nop in previous hardware, so it is safe to
    use unguarded. The default value is 'medium'.
+   From ISA 2.07:
+   Problem-state programs may only set values 1,2 and 6.
+   Privileged programs may set values 1,2,6,5 and 3.
+   If a program attempts to set a value that is not available to it,
+   the PRI field remains unchanged.
+
+     Rx = 5 (medium high)
+     Rx = 3 (high)
  */
 
 static inline void
@@ -88,6 +96,18 @@ static inline void
 paf_ppr_low (void)
 {
   __asm__ volatile ("or 1,1,1");
+}
+
+static inline void
+paf_ppr_med_high (void)
+{
+  __asm__ volatile ("or 5,5,5");
+}
+
+static inline void
+paf_ppr_high (void)
+{
+  __asm__ volatile ("or 3,3,3");
 }
 
 #endif
